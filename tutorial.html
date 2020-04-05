@@ -38,21 +38,143 @@
 <main>
     <div class="container">
         <div class="row">
-            <section>
-                <h2>Making a form using Excel VBA</h2>
-                <p>
-                    In this tutorial I will show you how to use forms in Excel and how these can be used within Excel.
-                </p>
-                <p>
-                    Table of contents
-                </p>
-                <p>
-                    Part 1: Enabling Excel VBA
-                </p>
-                <p>
-                    Before programming the first thing to do is enabling Excel Macro's
-                </p>
-            </section>
+            <p>
+                <span class="h1 d-block">Making a form using Excel VBA</span>
+                In this tutorial I will show you how to use forms in Excel and how these can be used within Excel.
+            </p>
+            <ul>
+                <li>
+                    <p><a href="Tutorial/ExcelVBAFormTutorial.xlsm">Excel file</a></p>
+                    <h2>Part 1: Enabling Excel VBA</h2>
+                    <p>
+                        The first part is simple. We will enable the developer tab in Excel so that we can use Macro's
+                        and Excel
+                        VBA. As seen in the two pictures below you can enable Excel VBA in the setting of Excel. Then in
+                        Customize Ribbon you have the option to unhide the Developer tab. Now if you look at your Excel
+                        their
+                        will be an extra tab.
+                    </p>
+                    <img class="img-fluid" src="Tutorial/ExcelOptions.png" alt="Excel Options" title="Excel Options"/>
+                    <img class="img-fluid" src="Tutorial/ExcelDeveloperTab.png" alt="Excel Developer Tab"
+                         title="Excel Developer Tab"/>
+                    <p>In this tab you will find Visual Basic which is what we will be using for the forms. Here you can
+                        also insert buttons among other things.</p>
+                    <img class="img-fluid" src="Tutorial/ExcelVBAButton.png" alt="Excel VBA Button"
+                         title="Excel VBA Button"/>
+                </li>
+                <li>
+                    <h2>Part 2: Creating a UserForm</h2>
+                    <p>Ok once you are in Excel VBA you can create a new form using the insert and then UserForm. The
+                        empty UserForm is created. If you open the context menu on your form you can view the properties
+                        of the form. Here you can change the name of the form, the caption and more. For filling the
+                        UserForm we can use the ToolBox. If you clicked this away you can get it back using the View and
+                        then Toolbox feature. In this example I used labels, text fields, combo fields and buttons.</p>
+                    <img class="img-fluid" src="Tutorial/ExcelUFButton.png" alt="Excel User Form Button"
+                         title="Excel User Form Button"/>
+                    <img class="img-fluid" src="Tutorial/ExcelUFProperties.png" alt="Excel User Form Properties"
+                         title="Excel User Form Properties"/>
+                    <img class="img-fluid" src="Tutorial/ExcelUFTools.png" alt="Excel User Form Tools"
+                         title="Excel User Form Tools"/>
+                </li>
+                <li>
+                    <h2>Part 3: Changing properties</h2>
+                    <p>In this part we are going to change the properties of all the elements so that we can later on
+                        use them easier. First change the name of all the fields where you will have input.
+                        <span class="d-block">Txt_FirstName</span>
+                        <span class="d-block">Txt_LastName</span>
+                        <span class="d-block">Txt_Address</span>
+                        <span class="d-block">Txt_City</span>
+                        <span class="d-block">Txt_PostalCode</span>
+                        <span class="d-block">Combo_Country</span>
+                        <span class="d-block">Combo_CustomerType</span>
+                        <span class="d-block">Txt_Notes</span>
+                        These are the fields I will use for the tutorial. If you have combo fields you can use dynamic
+                        ranges to supply possible choices.
+                    </p>
+                </li>
+                <li>
+                    <h2>Part 4: Making a dynamic Range</h2>
+                    <p>Dynamic range ensures that the list you give can be alerted and you will not have to change the
+                        whole excel because of it. First we will need a value of how long that list is. For that we can
+                        use the function COUNTA. here you supply what should be in the list but the end value of the
+                        range can be much bigger. This allows you to in the future add or delete items on that list and
+                        the dynamic list will still be working.
+                        <span class="d-block">=COUNTA($A$2:$A$9998)</span>
+                        Then we will use the name manager located in the formula tab to create or dynamic range.
+                        <span class="d-block">Dyn_Countries =OFFSET(ExtraLists!$A$2,0,0,ExtraLists!$D$2,1)</span>
+                        For the offset function you first need a starting point then you tell it how you want to change
+                        it. Here as the third argument I give the COUNTA function so that it know how many entries their
+                        are in the list.
+                    </p>
+                    <img class="img-fluid" src="Tutorial/ExcelDynamicRange.png" alt="Excel Dynamic Range"
+                         title="Excel Dynamic Range"/>
+                </li>
+                <li>
+                    <h2>Part 5: Creating Excel Module</h2>
+                    <p>For testing your dynamic range I suggest you create a new Excel Module. In this module you can
+                        write extra functions that can help your document.
+                        <span class="d-block">Sheets("ExtraLists").Range("Dyn_Countries").Select</span>
+                        This function will select the range that you have defined.
+                    </p>
+                    <img class="img-fluid" src="Tutorial/ExcelModule.png" alt="Excel Module" title="Excel Module"/>
+                </li>
+                <li>
+                    <h2>Part 6: Connecting Buttons to the User Form</h2>
+                    <p>In the module you can make an extra function that is going to connect a button to the User Form.
+                        <span class="d-block">AddCustomer.Show</span>
+                        This simple functions will show the User Form.
+                        In the User Form you can also click on a button that you have placed their to add some code.
+                        For my cancel button I would want it to close the User Form.
+                        <span class="d-block">Unload AddCustomer</span>
+                        This function does exactly that.
+                        Test this out so that you can enter your User Form and Exit it using a Cancel button.
+                    </p>
+                    <img class="img-fluid" src="Tutorial/ExcelExampleButton.png" alt="Excel Button"
+                         title="Excel Button"/>
+                </li>
+                <li>
+                    <h2>Part 7: Coding the user Form</h2>
+                    <p>If you want to navigate more quickly through the User Form use the TabIndex property to make it
+                        so that if you tab it takes you to the next field.
+                        <span class="d-block">Private Sub Button_Continue_Click()</span>
+                        <span class="d-block">TargetRowCustomer = Sheets("ExtraLists").Range("F2") + 1</span>
+                        <span class="d-block">If ((Txt_FirstName <> "") And (Txt_LastName <> "") And (Txt_Address <> "") And (Txt_City <> "") And (Txt_PostalCode <> "") And (Combo_Country <> "") And (Combo_CustomerType <> "")) Then</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, -1).Value = TargetRowCustomer</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 0).Value = Txt_FirstName</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 1).Value = Txt_LastName</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 2).Value = Txt_Address</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 3).Value = Txt_City</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 4).Value = Txt_PostalCode</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 5).Value = Combo_Country</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 6).Value = Combo_CustomerType</span>
+                        <span class="d-block">Sheets("CustomerList").Range("Customer_start").Offset(TargetRowCustomer, 7).Value = Txt_Notes</span>
+                        <span class="d-block">Unload AddCustomer</span>
+                        <span class="d-block">Else</span>
+                        <span class="d-block">Dim errorlist(1 To 7) As String</span>
+                        <span class="d-block">If (Txt_FirstName = "") Then errorlist(1) = "First Name"</span>
+                        <span class="d-block">If (Txt_LastName = "") Then errorlist(2) = "Last Name"</span>
+                        <span class="d-block">If (Txt_Address = "") Then errorlist(3) = "Address"</span>
+                        <span class="d-block">If (Txt_City = "") Then errorlist(4) = "City"</span>
+                        <span class="d-block">If (Txt_PostalCode = "") Then errorlist(5) = "Postal Code"</span>
+                        <span class="d-block">If (Combo_Country = "") Then errorlist(6) = "Country"</span>
+                        <span class="d-block">If (Combo_CustomerType = "") Then errorlist(7) = "Custromer Type"</span>
+                        <span class="d-block">MsgBox "Pleas fill in the following:" + vbNewLine + errorlist(1) + " - " + errorlist(2) + " - " + errorlist(3) + " - " + errorlist(4) + " - " + errorlist(5) + " - " + errorlist(6) + " - " + errorlist(7), vbCritical</span>
+                        <span class="d-block">End If</span>
+                        <span class="d-block">End Sub</span>
+                        This piece of code transfers the date you put in the input fields to actual cells. The
+                        TargetRowCustomer is linked to a COUNTA of all the entries that are in the list. The
+                        Customer_start is the start of the list of customers and the If Else is to ensure that no fields
+                        where empty.
+
+                    </p>
+
+                    <img class="img-fluid" src="Tutorial/ExcelUFFinished.png" alt="Excel User Form Finished"
+                         title="Excel User Form Finished"/>
+                    <img class="img-fluid" src="Tutorial/ExcelForm.png" alt="Excel Form Finished"
+                         title="Excel Form Finished">
+                </li>
+            </ul>
+            <p>References: <a href="https://www.youtube.com/user/TigerSpreadsheets">TigerSpreadsheets</a> </p>
         </div>
     </div>
 </main>

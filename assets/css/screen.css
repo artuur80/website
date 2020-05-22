@@ -23,3 +23,8 @@ footer {
 #redbackground {
    background-color: red;
 }
+
+div>p {
+    width: 100%;
+}
+
